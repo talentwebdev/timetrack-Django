@@ -1,0 +1,24 @@
+{
+    "pyformat.autopep8Args": [
+        "--max-line-length 80"
+    ],
+    "pyformat.formatProvider": "autopep8",
+    "pyformat.blackArgs": [
+        "--line-length 80"
+    ],
+    "python.venvFolders": [
+        "env"
+    ],
+    "python.venvPath": "./env",
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.terminal.activateEnvironment": true,
+    "python.pythonPath": "./env/bin/python3",
+    "python.defaultInterpreterPath": "./env/bin/python3",
+    "editor.defaultFormatter": "giyyapan.pyformat",
+    "python.formatting.provider": "autopep8",
+    "django.snippets.exclude": [
+        "cms",
+        "wagtail"
+    ],
+    "python.formatting.autopep8Path": "/usr/local/bin/autopep8"
+}

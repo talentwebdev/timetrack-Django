@@ -42,17 +42,17 @@ class Task(TimeStampedModel):
     name = models.CharField(max_length=255, null=True,
                             blank=True, help_text=_("Task name"))
     assignee = models.ManyToManyField(
-        User, related_name="tasks", help_text=_("Users assgined to this task"))
+        User, null=True, blank=True, related_name="tasks", help_text=_("Users assgined to this task"))
     due_date = models.DateTimeField(
         null=True, blank=True, help_text=_("Due date"))
     priority = models.CharField(
-        max_length=10, choices=PRIORITY_CHOICES, default=None, help_text=_("Priority choices"))
+        max_length=10, choices=PRIORITY_CHOICES, null=True, blank=True, default=None, help_text=_("Priority choices"))
     estimated_time = models.TimeField(
         null=True, blank=True, help_text=_("Estimated time for task"))
     start_date = models.DateField(
         null=True, blank=True, help_text=_("Task started date"))
     tags = models.ManyToManyField(
-        Tag, related_name="tasks", help_text=_("Tags attached to the task"))
+        Tag, null=True, blank=True, related_name="tasks", help_text=_("Tags attached to the task"))
 
 
 class TimeLogEntry(TimeStampedModel):

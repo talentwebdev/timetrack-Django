@@ -52,7 +52,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     permission_classes = (IsAuthenticated, IsTaskOwner, )
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
-    filter_class=TaskFilter
+    filter_class = TaskFilter
     filterset_fields = ['name']
 
 

@@ -14,13 +14,17 @@ from .models import (
 from .serializers import (
     ProjectSerializer,
     TagSerializer,
-    TaskSerializer
+    TaskSerializer,
+    TimeLogSerializer
 )
 from .permissions import (
     IsOwnerOrReadOnly,
     IsTaskOwner
 )
-from .filters import TaskFilter
+from .filters import (
+    TaskFilter,
+    TimeLogFilter 
+)
 
 # Create your views here.
 
@@ -48,15 +52,32 @@ class TagViewSet(viewsets.ModelViewSet):
 
 
 class TaskViewSet(viewsets.ModelViewSet):
+    """
+    A viewset that provides the actions for tasks
+    """
+
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = (IsAuthenticated, IsTaskOwner, )
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     filter_class = TaskFilter
-    filterset_fields = ['name']
+
+
+class TimeLogViewSet(viewsets.ModelViewSet):
+    """
+    A viewset that provides the actions for time logs
+    """
+    serializer_class = TimeLogSerializer
+    permission_classes = (IsAuthenticated, )
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filter_class = TimeLogFilter
+
+    def get_queryset(self):
+        return self.request.user.time_logs.all()
 
 
 router = DefaultRouter()
 router.register(r'api/projects', ProjectViewSet, basename='projects')
 router.register(r'api/tags', TagViewSet, basename='tags')
 router.register(r'api/tasks', TaskViewSet, basename='tasks')
+router.register(r'api/timelogs', TimeLogViewSet, basename='timelogs')

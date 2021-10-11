@@ -1,4 +1,4 @@
-from datetime import datetime, time
+from datetime import datetime, time, date
 
 
 from django.db import models
@@ -42,7 +42,7 @@ class Task(TimeStampedModel):
     name = models.CharField(max_length=255, null=True,
                             blank=True, help_text=_("Task name"))
     assignee = models.ManyToManyField(
-        User, null=True, blank=True, related_name="tasks", help_text=_("Users assgined to this task"))
+        User, null=True, blank=True, related_name="tasks", help_text=_("Users assigned to this task"))
     due_date = models.DateTimeField(
         null=True, blank=True, help_text=_("Due date"))
     priority = models.CharField(
@@ -84,13 +84,15 @@ class TimeLogEntry(TimeStampedModel):
             self.log_start_time = datetime.now()
 
             # if time track is started again, then stop other running trackers for current user
-            self.objects.filter(user=self.user, completed=False,
-                                paused=False).update(paused=True)
+            TimeLogEntry.objects.filter(user=self.user, completed=False,
+                                        paused=False).update(paused=True)
 
         # if time track log is paused or completed, then update ttl_logged_time
         if _is_paused or _is_completed:
             # add ttl_logged_time
-            _time_elapsed = datetime.now() - self.log_start_time
-            self.ttl_logged_time = self.ttl_logged_time + _time_elapsed
+            _time_elapsed = datetime.now().replace(tzinfo=None) - \
+                self.log_start_time.replace(tzinfo=None)
+            self.ttl_logged_time = (datetime.combine(
+                date(1, 1, 1), self.ttl_logged_time) + _time_elapsed).time()
 
         super().save(*args, **kwargs)
